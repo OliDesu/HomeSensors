@@ -4,11 +4,15 @@
 
 // Sensor pins
 #define pinA A4         // MQ135 pin connected to A4
+#define pinB A5         // MQ135 pin connected to A5
+
 #define DHTPIN 2        // AM2302 (DHT22) data pin connected to digital pin 2
 #define DHTTYPE DHT22   // Defining the sensor type as DHT22
 
 // Initialization of the MQ135 sensor
-MQ135 sensorMQ = MQ135(pinA);
+MQ135 sensorMQ1 = MQ135(pinA);
+MQ135 sensorMQ = MQ135(pinB);
+
 
 // Initialization of the AM2302 (DHT22) sensor
 DHT dht(DHTPIN, DHTTYPE);
@@ -34,8 +38,9 @@ void setup() {
 
 void loop() {
   // Reading gas concentration in ppm from MQ135 sensor
-  float ppm = sensorMQ.getPPM();
-
+  float ppm1 = sensorMQ1.getPPM();
+  float ppm2 = sensorMQ.getPPM();
+  float meanPpm = (ppm1 + ppm2)/2;
   // Reading temperature and humidity from AM2302 sensor
   float humidity = dht.readHumidity();
   float temperature = dht.readTemperature();
@@ -46,7 +51,7 @@ void loop() {
   } else {
     // Print measured values to serial monitor
     Serial.print("Gaz: ");
-    Serial.print(ppm);
+    Serial.print(meanPpm);
     Serial.println(" ppm");
 
     Serial.print("Humidity: ");
@@ -69,7 +74,7 @@ void loop() {
     digitalWrite(ledPin2, HIGH);
   }
 
-  if (ppm < 800.0) { 
+  if (meanPpm < 800.0) { 
 
     digitalWrite(ledPin3, LOW);
   } else {
