@@ -1,3 +1,5 @@
+// ----------------- Copyright Ali El Mufti-------------//
+
 // Include necessary libraries
 #include "MQ135.h"
 #include "DHT.h"
